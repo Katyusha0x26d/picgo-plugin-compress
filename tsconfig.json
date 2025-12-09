@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2019",
     "module": "commonjs",
     "outDir": "dist",
     "moduleResolution": "node",
@@ -14,9 +14,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "lib": [
-      "es2017",
-      "es2015",
-      "es6"
+      "es2020"
     ]
   },
   "include": [

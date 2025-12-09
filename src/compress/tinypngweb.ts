@@ -1,8 +1,7 @@
-import PicGo from 'picgo'
+import type { IPicGo } from 'picgo'
 import { CommonParams, ImageInfo } from '../interface'
 import { TINYPNG_WEBUPLOAD_URL } from '../config'
-import { Response } from 'request'
-import { getImageBuffer, getImageInfo } from '../utils'
+import { getImageBuffer, getImageInfo, getPicGoRequester } from '../utils'
 
 function getHeaders() {
   const v = 59 + Math.round(Math.random() * 10)
@@ -15,22 +14,28 @@ function getHeaders() {
   }
 }
 
-export function TinypngCompress(ctx: PicGo, { imageUrl }: CommonParams): Promise<ImageInfo> {
-  return getImageBuffer(ctx, imageUrl).then((buffer) => {
-    ctx.log.info('TinypngWeb 压缩开始')
-    const req = ctx.Request.request({ url: TINYPNG_WEBUPLOAD_URL, method: 'POST', headers: getHeaders(), resolveWithFullResponse: true })
-    req.end(buffer)
-    return req
-      .then((data: Response) => {
-        if (data.headers.location) {
-          ctx.log.info('TinypngWeb 压缩成功:' + data.headers.location)
-          ctx.log.info('下载 Tinypng 图片')
-          return getImageBuffer(ctx, data.headers.location)
-        }
-        throw new Error('TinypngWeb 上传失败')
-      })
-      .then((buffer) => {
-        return getImageInfo(imageUrl, buffer)
-      })
-  })
+export async function TinypngCompress(ctx: IPicGo, { imageUrl, stripExif = true }: CommonParams): Promise<ImageInfo> {
+  const buffer = await getImageBuffer(ctx, imageUrl, { stripExif })
+  ctx.log.info('TinypngWeb 压缩开始')
+  const requester = getPicGoRequester(ctx)
+  const response = (await requester({
+    url: TINYPNG_WEBUPLOAD_URL,
+    method: 'POST',
+    headers: getHeaders(),
+    data: buffer,
+    responseType: 'json',
+    resolveWithFullResponse: true,
+    maxBodyLength: Infinity,
+  })) as {
+    headers: Record<string, string | string[] | undefined>
+  }
+  const locationHeader = response.headers.location ?? response.headers.Location
+  const location = Array.isArray(locationHeader) ? locationHeader[0] : locationHeader
+  if (!location) {
+    throw new Error('TinypngWeb 上传失败')
+  }
+  ctx.log.info('TinypngWeb 压缩成功:' + location)
+  ctx.log.info('下载 Tinypng 图片')
+  const downloadBuffer = await getImageBuffer(ctx, location)
+  return getImageInfo(imageUrl, downloadBuffer)
 }

@@ -1,15 +1,14 @@
 import * as path from 'path'
 import * as fs from 'fs-extra'
-import { getImageBuffer, isNetworkUrl } from '../../utils'
+import { getImageBuffer, isNetworkUrl, getPicGoRequester } from '../../utils'
 import { TINYPNG_UPLOAD_URL } from '../../config'
 import Base64 from 'crypto-js/enc-base64'
 import Utf8 from 'crypto-js/enc-utf8'
-import PicGo from 'picgo'
-import { Response } from 'request'
+import type { IPicGo } from 'picgo'
 
 interface TinyPngOptions {
   keys: string[]
-  ctx: PicGo
+  ctx: IPicGo
 }
 
 interface TinyCacheConfig {
@@ -22,7 +21,7 @@ interface TinyCacheConfig {
 class TinyPng {
   private cacheConfigPath = path.join(__dirname, 'config.json')
   private options!: TinyPngOptions
-  private PicGo!: PicGo
+  private PicGo!: IPicGo
 
   async init(options: TinyPngOptions) {
     this.PicGo = options.ctx
@@ -31,15 +30,16 @@ class TinyPng {
     this.PicGo.log.info('TinyPng初始化')
   }
 
-  async upload(url: string) {
+  async upload(url: string, stripExif = true) {
     this.PicGo.log.info('TinyPng开始上传')
     if (isNetworkUrl(url)) {
-      return this.uploadImage({ url, originalUrl: url, key: await this.getKey() })
+      return this.uploadImage({ url, originalUrl: url, key: await this.getKey(), stripExif })
     } else {
       return this.uploadImage({
         key: await this.getKey(),
         originalUrl: url,
-        buffer: await getImageBuffer(this.PicGo, url),
+        buffer: await getImageBuffer(this.PicGo, url, { stripExif }),
+        stripExif,
       })
     }
   }
@@ -53,56 +53,75 @@ class TinyPng {
     return innerKeys[0]
   }
 
-  private uploadImage(options: { key: string; originalUrl: string; url?: string; buffer?: Buffer }): Promise<Buffer> {
+  private async uploadImage(options: { key: string; originalUrl: string; url?: string; buffer?: Buffer; stripExif?: boolean }): Promise<Buffer> {
     this.PicGo.log.info('使用TinypngKey:' + options.key)
 
     const bearer = Base64.stringify(Utf8.parse(`api:${options.key}`))
 
-    const fetchOptions = {
-      method: 'POST',
-      url: TINYPNG_UPLOAD_URL,
-      json: true,
-      resolveWithFullResponse: true,
-      headers: {
-        Host: 'api.tinify.com',
-        Authorization: `Basic ${bearer}`,
-      },
+    const headers: Record<string, string> = {
+      Host: 'api.tinify.com',
+      Authorization: `Basic ${bearer}`,
     }
+
+    let data: Buffer | Record<string, any>
 
     if (options.url) {
       this.PicGo.log.info('TinyPng 上传网络图片')
-      Object.assign(fetchOptions.headers, {
-        'Content-Type': 'application/json',
-      })
-      Object.assign(fetchOptions, {
-        body: {
-          source: {
-            url: options.url,
-          },
+      headers['Content-Type'] = 'application/json'
+      data = {
+        source: {
+          url: options.url,
         },
-      })
-    }
-
-    const req = this.PicGo.Request.request(fetchOptions)
-
-    if (options.buffer) {
+      }
+    } else if (options.buffer) {
       this.PicGo.log.info('TinyPng 上传本地图片')
-      req.end(options.buffer)
+      headers['Content-Type'] = 'application/octet-stream'
+      data = options.buffer
+    } else {
+      throw new Error('无效的 Tinypng 上传参数')
     }
 
-    return req.then((response: Response) => {
-      this.setConfig(options.key, parseInt(response.headers['compression-count'] as any))
-      if (response.statusCode && response.statusCode >= 200 && response.statusCode <= 299) {
-        console.log(response.statusCode)
-        console.log(response.headers.location)
-        return getImageBuffer(this.PicGo, response.headers.location as any)
+    const requester = getPicGoRequester(this.PicGo)
+    const response = (await requester({
+      method: 'POST',
+      url: TINYPNG_UPLOAD_URL,
+      headers,
+      data,
+      responseType: 'json',
+      resolveWithFullResponse: true,
+      maxBodyLength: Infinity,
+    })) as {
+      status?: number
+      statusCode?: number
+      headers: Record<string, string | string[] | undefined>
+    }
+
+    const compressionCountHeader = response.headers['compression-count']
+    if (compressionCountHeader) {
+      const countValue = Array.isArray(compressionCountHeader) ? compressionCountHeader[0] : compressionCountHeader
+      const compressionCount = parseInt(countValue || '0', 10)
+      if (!Number.isNaN(compressionCount)) {
+        await this.setConfig(options.key, compressionCount)
       }
-      if (response.statusCode === 429) {
-        this.setConfig(options.key, -1)
-        return this.upload(options.originalUrl)
+    }
+
+    const statusCode = response.status ?? response.statusCode ?? 0
+
+    if (statusCode >= 200 && statusCode <= 299) {
+      const locationHeader = response.headers.location ?? response.headers.Location
+      const location = Array.isArray(locationHeader) ? locationHeader[0] : locationHeader
+      if (!location) {
+        throw new Error('Tinypng 未返回下载地址')
       }
-      throw new Error('未知错误')
-    })
+      return getImageBuffer(this.PicGo, location)
+    }
+
+    if (statusCode === 429) {
+      await this.setConfig(options.key, -1)
+      return this.upload(options.originalUrl)
+    }
+
+    throw new Error(`未知错误: ${statusCode}`)
   }
 
   private async setConfig(key: string, num: number) {

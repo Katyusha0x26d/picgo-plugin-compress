@@ -8,6 +8,7 @@ export interface ImageInfo {
 
 export interface CommonParams {
   imageUrl: string
+  stripExif?: boolean
 }
 
 export interface IConfig {
@@ -15,4 +16,5 @@ export interface IConfig {
   key: string
   tinypngKey: string
   nameType: string
+  clearExif?: boolean
 }
