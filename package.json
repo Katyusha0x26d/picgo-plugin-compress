@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^24.10.2",
+    "@types/node": "^25.0.2",
     "@types/request": "^2.48.13",
     "@typescript-eslint/parser": "^8.49.0",
     "picgo": "^1.5.11",
