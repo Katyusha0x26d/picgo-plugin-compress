@@ -30,4 +30,4 @@ npm run build
 | EXIF 信息 | Make:SONY,Model:ILCE-7M2,...                       | -                                                      | -                                                                  | Make:SONY,Model:ILCE-7M2,...                       | Make:SONY,Model:ILCE-7M2,...                                   |
 | 示例文件  | [tests/original_exif.jpg](tests/original_exif.jpg) | [tests/imagemin_noexif.jpg](tests/imagemin_noexif.jpg) | [tests/imagemin_webp_noexif.webp](tests/imagemin_webp_noexif.webp) | [tests/imagemin_exif.jpg](tests/imagemin_exif.jpg) | [tests/imagemin_webp_exif.webp](tests/imagemin_webp_exif.webp) |
 
-**注：tinypng 服务端会自动去除 EXIF 信息，所以对于 tinypng 压缩选项，即使没用勾选去除 EXIF，也会自动去除 EXIF 信息**
+**注：tinypng 服务端会自动去除 EXIF 信息，所以对于 tinypng 压缩选项，即使没有勾选去除 EXIF，也会自动去除 EXIF 信息**
