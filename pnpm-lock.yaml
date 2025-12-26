@@ -38,7 +38,7 @@ importers:
         version: 8.49.0(eslint@6.8.0)(typescript@5.9.3)
       picgo:
         specifier: ^1.5.11
-        version: 1.6.0
+        version: 1.6.2
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -1179,10 +1179,6 @@ packages:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
     engines: {node: '>=8.6'}
 
-  mime-db@1.50.0:
-    resolution: {integrity: sha512-9tMZCDlYHqeERXEHO9f/hKfNXhre5dK2eE/krIvUjZbS2KPcqGDfNShIWS1uW9XOTKQKqK6qbeOci18rbfW77A==}
-    engines: {node: '>= 0.6'}
-
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
     engines: {node: '>= 0.6'}
@@ -1191,13 +1187,13 @@ packages:
     resolution: {integrity: sha512-aU5EJuIN2WDemCcAp2vFBfp/m4EAhWJnUNSSw0ixs7/kXbd6Pg64EmwJkNdFhB8aWt1sH2CTXrLxo/iAGV3oPQ==}
     engines: {node: '>= 0.6'}
 
-  mime-types@2.1.33:
-    resolution: {integrity: sha512-plLElXp7pRDd0bNZHw+nMd52vRYjLwQjygaNg7ddJ2uJtTlmnTCjWuPKxVu6//AdaRuME84SvLW91sIkBqGT0g==}
-    engines: {node: '>= 0.6'}
-
   mime-types@2.1.35:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
+
+  mime-types@3.0.2:
+    resolution: {integrity: sha512-Lbgzdk0h4juoQ9fCKXW4by0UJqj+nOOrI9MJ1sSj4nI8aI2eo1qmvQEie4VD1glsS250n15LsWsYtCugiStS5A==}
+    engines: {node: '>=18'}
 
   mime@2.6.0:
     resolution: {integrity: sha512-USPkMeET31rOMiarsBNIHZKLGgvKc/LrjofAnBlOttf5ajRvqiRA8QsenbcooctK6d6Ts6aqZXBA+XbkKthiQg==}
@@ -1360,8 +1356,8 @@ packages:
   pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
 
-  picgo@1.6.0:
-    resolution: {integrity: sha512-BwWsXfx7LJEFBTCVs1QcEyhmXKqcgSemx0fZpp1Jus/LoEaybLQy8yEdEftKSf9c5BdOYfqqskQfZQ8L1p79hA==}
+  picgo@1.6.2:
+    resolution: {integrity: sha512-8o7ldUGHNywDX3keHeuiuSZZHt/hCyHepzzGA3Y3OdAZLIWdHI7NRjgUIQ2fsspQnkKaB4bm5xphoENhDiHuig==}
     engines: {node: '>= 20.0.0'}
     hasBin: true
 
@@ -2644,7 +2640,7 @@ snapshots:
       combined-stream: 1.0.8
       es-set-tostringtag: 2.1.0
       hasown: 2.0.2
-      mime-types: 2.1.33
+      mime-types: 2.1.35
 
   formstream@1.5.2:
     dependencies:
@@ -2990,19 +2986,17 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
-  mime-db@1.50.0: {}
-
   mime-db@1.52.0: {}
 
   mime-db@1.54.0: {}
 
-  mime-types@2.1.33:
-    dependencies:
-      mime-db: 1.50.0
-
   mime-types@2.1.35:
     dependencies:
       mime-db: 1.52.0
+
+  mime-types@3.0.2:
+    dependencies:
+      mime-db: 1.54.0
 
   mime@2.6.0: {}
 
@@ -3138,7 +3132,7 @@ snapshots:
 
   pend@1.2.0: {}
 
-  picgo@1.6.0:
+  picgo@1.6.2:
     dependencies:
       '@picgo/i18n': 1.0.0
       '@picgo/store': 2.1.0
@@ -3159,7 +3153,7 @@ snapshots:
       js-yaml: 4.1.1
       lodash: 4.17.21
       md5: 2.3.0
-      mime-types: 2.1.33
+      mime-types: 3.0.2
       minimatch: 3.1.2
       minimist: 1.2.8
       qiniu: 7.14.0
