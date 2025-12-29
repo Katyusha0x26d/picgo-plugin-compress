@@ -38,7 +38,7 @@ importers:
         version: 8.50.0(eslint@6.8.0)(typescript@5.9.3)
       picgo:
         specifier: ^1.5.11
-        version: 1.6.2
+        version: 1.6.4
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -511,8 +511,8 @@ packages:
     resolution: {integrity: sha512-T+iXox779qsqneMYx/x5BZyz4xjCeQRmuNVzz8tko7qZUs3MlzpA3RAs+O1XsgcKToNBMIvfVzafGOeiU7RggA==}
     engines: {node: '>= 6'}
 
-  comment-json@4.5.0:
-    resolution: {integrity: sha512-aKl8CwoMKxVTfAK4dFN4v54AEvuUh9pzmgVIBeK6gBomLwMgceQUKKWHzJdW1u1VQXQuwnJ7nJGWYYMTl5U4yg==}
+  comment-json@4.5.1:
+    resolution: {integrity: sha512-taEtr3ozUmOB7it68Jll7s0Pwm+aoiHyXKrEC8SEodL4rNpdfDLqa7PfBlrgFoCNNdR8ImL+muti5IGvktJAAg==}
     engines: {node: '>= 6'}
 
   concat-map@0.0.1:
@@ -762,8 +762,8 @@ packages:
   fast-levenshtein@2.0.6:
     resolution: {integrity: sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==}
 
-  fastq@1.19.1:
-    resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
+  fastq@1.20.1:
+    resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
 
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
@@ -1356,8 +1356,8 @@ packages:
   pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
 
-  picgo@1.6.2:
-    resolution: {integrity: sha512-8o7ldUGHNywDX3keHeuiuSZZHt/hCyHepzzGA3Y3OdAZLIWdHI7NRjgUIQ2fsspQnkKaB4bm5xphoENhDiHuig==}
+  picgo@1.6.4:
+    resolution: {integrity: sha512-3RIcRVArRNqZKeRvFnClqr+JzJI4tjtYjpdgpCAhdtqr5cpT6HTp0C0d5GMExTCXjXc313Vdo4/W4S0fQVw2Zw==}
     engines: {node: '>= 20.0.0'}
     hasBin: true
 
@@ -1950,7 +1950,7 @@ snapshots:
   '@nodelib/fs.walk@1.2.8':
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
-      fastq: 1.19.1
+      fastq: 1.20.1
 
   '@picgo/i18n@1.0.0':
     dependencies:
@@ -1964,7 +1964,7 @@ snapshots:
       '@types/bson': 4.2.4
       '@types/graceful-fs': 4.1.9
       '@types/lodash': 4.17.21
-      comment-json: 4.5.0
+      comment-json: 4.5.1
       fflate: 0.7.4
       lodash: 4.17.21
       lodash-id: 0.14.1
@@ -2276,7 +2276,7 @@ snapshots:
       has-own-prop: 2.0.0
       repeat-string: 1.6.1
 
-  comment-json@4.5.0:
+  comment-json@4.5.1:
     dependencies:
       array-timsort: 1.0.3
       core-util-is: 1.0.3
@@ -2563,7 +2563,7 @@ snapshots:
 
   fast-levenshtein@2.0.6: {}
 
-  fastq@1.19.1:
+  fastq@1.20.1:
     dependencies:
       reusify: 1.1.0
 
@@ -3132,7 +3132,7 @@ snapshots:
 
   pend@1.2.0: {}
 
-  picgo@1.6.2:
+  picgo@1.6.4:
     dependencies:
       '@picgo/i18n': 1.0.0
       '@picgo/store': 2.1.0
